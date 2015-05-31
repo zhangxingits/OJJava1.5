@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<!--
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+ -->
+<head>
+<title>Insert title here</title>
+ <script src="Scripts/jquery-1.5.1.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function initDatabase() {
+            var db = getCurrentDb();//初始化数据库
+            if(!db) {alert("您的浏览器不支持HTML5本地数据库");return;}
+            db.transaction(function (trans) {//启动一个事务，并设置回调函数
+                //执行创建表的Sql脚本
+                trans.executeSql("create table if not exists Demo(uName text null,title text null,words text null)", [], function (trans, result) {
+                }, function (trans, message) {//消息的回调函数alert(message);});
+            }, function (trans, result) {
+            }, function (trans, message) {
+            });
+        }
+        $(function () {//页面加载完成后绑定页面按钮的点击事件
+            initDatabase();
+            $("#btnSave").click(function () {
+                var txtName = $("#txtName").val();
+                var txtTitle = $("#txtTitle").val();
+                var txtWords = $("#txtWords").val();
+                var db = getCurrentDb();
+                //执行sql脚本，插入数据
+                db.transaction(function (trans) {
+                    trans.executeSql("insert into Demo(uName,title,words) values(?,?,?) ", [txtName, txtTitle, txtWords], function (ts, data) {
+                    }, function (ts, message) {
+                        alert(message);
+                    });
+                });
+                showAllTheData();
+            });
+        });
+        function getCurrentDb() {
+            //打开数据库，或者直接连接数据库参数：数据库名称，版本，概述，大小
+            //如果数据库不存在那么创建之
+            var db = openDatabase("myDb", "1.0", "it's to save demo data!", 1024 * 1024); ;
+            return db;
+        }
+        //显示所有数据库中的数据到页面上去
+        function showAllTheData() {
+            $("#tblData").empty();
+            var db = getCurrentDb();
+            db.transaction(function (trans) {
+                trans.executeSql("select * from Demo ", [], function (ts, data) {
+                    if (data) {
+                        for (var i = 0; i < data.rows.length; i++) {
+                            appendDataToTable(data.rows.item(i));//获取某行数据的json对象
+                        }
+                    }
+                }, function (ts, message) {alert(message);var tst = message;});
+            });
+        }
+        function appendDataToTable(data) {//将数据展示到表格里面
+            //uName,title,words
+            var txtName = data.uName;
+            var txtTitle = data.title;
+            var words = data.words;
+            var strHtml = "";
+            strHtml += "<tr>";
+            strHtml += "<td>"+txtName+"</td>";
+            strHtml += "<td>" + txtTitle + "</td>";
+            strHtml += "<td>" + words + "</td>";
+            strHtml += "</tr>";
+            $("#tblData").append(strHtml);
+        }
+    </script>
+</head>
+<body>
+        <table>
+            <tr>
+                <td>用户名：</td>
+                <td><input type="text" name="txtName" id="txtName" required/></td>
+            </tr>
+               <tr>
+                <td>标题：</td>
+                <td><input type="text" name="txtTitle" id="txtTitle" required/></td>
+            </tr>
+            <tr>
+                <td>留言：</td>
+                <td><input type="text" name="txtWords" id="txtWords" required/></td>
+            </tr>
+        </table>
+        <input type="button" value="保存" id="btnSave"/>
+        <hr/>
+        <input type="button" value="展示所哟数据" onclick="showAllTheData();"/>
+        <table id="tblData">
+        </table>
+</body>
+<!-- <body> -->
+<!--  
+<script type="text/javascript">
+    //添加key-value 数据到 sessionStorage
+    localStorage.setItem("86", "张新");
+    //通过key来获取value
+    var dt = localStorage.getItem("86");
+    alert(dt);
+    //清空所有的key-value数据。
+    localStorage.clear();
+    alert(localStorage.length);
+    
+  //添加key-value 数据到 sessionStorage
+    sessionStorage.setItem("demokey", "http://blog.itjeek.com");
+    //通过key来获取value
+    var dt = sessionStorage.getItem("demokey");
+    alert(dt);
+    //清空所有的key-value数据。
+    //sessionStorage.clear();
+    alert(sessionStorage.length);
+</script>-->
+<!-- 
+<canvas id="demoCanvas" width="500" height="600"></canvas>
+<script type="text/javascript">
+    //通过id获得当前的Canvas对象
+    var canvasDom = document.getElementById("demoCanvas");
+    //通过Canvas Dom对象获取Context的对象
+    var context = canvasDom.getContext("2d");
+    var image = new Image();//创建一张图片
+    image.src = "images/me.jpg";//设置图片的路径
+    image.onload = function() {//当图片加载完成后
+     for (var i = 0; i < 3; i++) {//输出10张照片
+            //参数：（1）绘制的图片  （2）坐标x，（3）坐标y
+            context.drawImage(image, 100 + i * 80, 100 + i * 80);
+        }
+    };
+</script>
+
+ -->
+
+<!-- 
+<script type="text/javascript">
+    //通过id获得当前的Canvas对象
+    var canvasDom = document.getElementById("demoCanvas");
+    //通过Canvas Dom对象获取Context的对象
+    var context = canvasDom.getContext("2d");
+    context.beginPath();//开始绘制路径
+    //绘制以 （60,60）为圆心，50为半径长度，从0度到360度（PI是180度），最后一个参数代表顺时针旋转。
+    context.arc(60, 60, 50, 0, Math.PI * 2, true);
+    context.lineWidth = 5.0;//线的宽度
+    context.strokeStyle = "#00f";//线的样式
+    context.stroke();//绘制空心的，当然如果使用fill那就是填充了。
+</script>-->
+<!--
+<script type="text/javascript">
+    //通过id获得当前的Canvas对象
+    var canvasDom = document.getElementById("demoCanvas");
+    //通过Canvas Dom对象获取Context的对象
+    var context = canvasDom.getContext("2d");
+ 	// 设置路径起点，坐标为(200,200)
+    context.moveTo(200,200);
+    // 设置字体
+    context.font = "Bold 24px Arial";
+    // 设置对齐方式
+    context.textAlign = "left";
+    // 设置填充颜色
+    context.fillStyle = "#005600";
+    // 设置字体内容，以及在画布上的位置
+    context.fillText("张信!", 10, 50);
+    // 绘制空心字
+    context.strokeText("blog.itjeek.com!", 10, 100);
+</script>-->
+<!-- </body> -->
+<!--
+<body>
+    <canvas id="demoCanvas" width="500" height="600">
+    </canvas>
+    <script type="text/javascript">
+        //通过id获得当前的Canvas对象
+        var canvasDom = document.getElementById("demoCanvas");
+        //通过Canvas Dom对象获取Context的对象
+        var context = canvasDom.getContext("2d");
+        context.beginPath(); // 开始路径绘制
+        context.moveTo(20, 20); // 设置路径起点，坐标为(20,20)
+        context.lineTo(200, 200); // 绘制一条到(200,20)的直线
+        context.lineTo(400, 20);
+        context.closePath();
+        context.lineWidth = 10.0; // 设置线宽
+        context.strokeStyle = "#CC0000"; // 设置线的颜色
+        context.stroke(); // 进行线的着色，这时整条线才变得可见
+    </script>
+</body>-->
+<!-- 
+<body>
+	<canvas id="demoCanvas" width="500" height="500">
+        <p>请使用支持HTML5的浏览器查看本实例</p>
+    </canvas>
+	下面将演示一种绘制矩形的demo
+	<script type="text/javascript">
+		//第一步：获取canvas元素
+		var canvasDom = document.getElementById("demoCanvas");
+		//第二步：获取上下文
+		var context = canvasDom.getContext('2d');
+		//第三步：指定绘制线样式、颜色
+		context.strokeStyle = "red";
+		//第四步：绘制矩形，只有线。内容是空的
+		context.strokeRect(10, 10, 190, 100);
+		//以下演示填充矩形。
+		context.fillStyle = "blue";
+		context.fillRect(110, 110, 100, 100);
+	</script>
+</body>
+ -->
+
+</html>
