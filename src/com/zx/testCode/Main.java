@@ -2,73 +2,53 @@ package com.zx.testCode;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.*;
+import java.util.*;
 
 public class Main {
 	public static void main(String[] args) {
+		
 		Scanner scanner=new Scanner(System.in);
-		String willDo=scanner.nextLine();
-		String done=scanner.nextLine();
-		StringBuffer sbBuffer=new StringBuffer();
-		for (int i = 0; i < willDo.length(); i++) {
-			Character character=willDo.charAt(i);
-			if (Character.isDigit(character)) {
-				int n=Integer.parseInt(character+"");
-				n++;
-				if (n==10) {
-					n=0;
-				}
-				sbBuffer.append(n);
-			}else {
-				if (character=='z') {
-					character='A';
-				}else if (character=='Z') {
-					character='a';
-				}else {
-					character++;
-					if (Character.isUpperCase(character)) {
-						character = Character.toLowerCase(character);
-					}else {
-						character = Character.toUpperCase(character);
-					}
-				}
-				sbBuffer.append(character);
-			}
+		double d=scanner.nextDouble();
+		if (d==0) {
+			System.out.printf("%.1f%n",0.0);
+		}else {
+			double x0,x1;  
+		    x0=d;  
+		    x1=(2*x0/3)+(d/(x0*x0*3));//利用迭代法求解  
+		    while(Math.abs(x1-x0)>0.000001){  
+		        x0=x1;  
+		        x1=(2*x0/3)+(d/(x0*x0*3));  
+		    }
+		    System.out.printf("%.1f%n",x1);
 		}
-		System.out.println(sbBuffer.toString());
-		sbBuffer.delete(0, willDo.length());
-		for (int i = 0; i < done.length(); i++) {
-			Character character=done.charAt(i);
-			if (Character.isDigit(character)) {
-				int n=Integer.parseInt(character+"");
-				n--;
-				if (n==-1) {
-					n=9;
-				}
-				sbBuffer.append(n+"");
-			}else {
-				if (character=='a') {
-					character='Z';
-				}else if (character=='A') {
-					character='z';
-				}else {
-					character--;
-					if (Character.isUpperCase(character)) {
-						character=Character.toLowerCase(character);
-					}else {
-						character=Character.toUpperCase(character);
-					}
-				}
-				sbBuffer.append(character);
-			}
-		}
-		System.out.println(sbBuffer.toString());
+		scanner.close();
 	}
 }
 
 class Test {
+	
+	//求解立方根
+	public static void qiuJieLifanggen() {
+		Scanner scanner=new Scanner(System.in);
+		double d=scanner.nextDouble();
+		if (d==0) {
+			System.out.printf("%.1f%n",0.0);
+			return;
+		}else {
+			double x0,x1;  
+		    x0=d;  
+		    x1=(2*x0/3)+(d/(x0*x0*3));//利用迭代法求解  
+		    while(Math.abs(x1-x0)>0.000001){  
+		        x0=x1;  
+		        x1=(2*x0/3)+(d/(x0*x0*3));  
+		    }
+		    System.out.printf("%.1f%n",x1);
+		}
+		
+	}
+	
 	//字符串加密
 	public static void zifuchuanjiami() {
 		Scanner scanner=new Scanner(System.in);
